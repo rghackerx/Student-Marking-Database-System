@@ -34,22 +34,26 @@ def success_msg_win(num):
 def create_gui():
     main = ctk.CTk()
     main.configure(bg='black')
-    main.title("STUDENT MARKS MANAGEMENT SYSTEM")
-    main.geometry("450x200")
+    main.title("")
+    main.geometry("500x250")
 
-    label = ctk.CTkLabel(main, text="Student Management System", font=("Arial", 13))
+    label = ctk.CTkLabel(main, text="STUDENT MARKING MANAGEMENT SYSTEM", font=("Arial", 13))
     label.pack(pady=10)
 
-    button_insertion = ctk.CTkButton(main, text='1. Insertion of Student Records', width=30,
+    button_insertion = ctk.CTkButton(main, text='1. Insertion of Student Records', width=100,
                                   command=insertion_menu)
     button_insertion.pack(pady=5)
 
-    button_deletion = ctk.CTkButton(main, text='2. Deletion of Previous Record', width=30,
+    button_deletion = ctk.CTkButton(main, text='2. Deletion of Previous Record', width=100,
                                   command=win_data_deletion)
     button_deletion.pack(pady=5)
 
-    button_marks = ctk.CTkButton(main, text='3. Marks Insertion', width=30,
+    button_marks = ctk.CTkButton(main, text='3.Marks Insertion', width=100,
                                command=man_marks_gui)
+    button_marks.pack(pady=5)
+    
+    button_marks = ctk.CTkButton(main, text='4. View Details', width=100,
+                               command=win_view_deatils)
     button_marks.pack(pady=5)
 
     button_1 = ctk.CTkButton(main, text='Exit', width=20, command=exit)
@@ -67,9 +71,9 @@ def win_data_deletion():
     
     button_1 = ctk.CTkButton(win, text='1. Delete the database', width=20, command=dataDeletion)
     button_1.pack(pady=5)
-    button_2 = ctk.CTkButton(win, text='2. Delete the records', width=20, command=man_dataDeletion)
+    button_2 = ctk.CTkButton(win, text='2. Delete by inserting file', width=20, command=man_dataDeletion)
     button_2.pack(pady=5)
-    button_2 = ctk.CTkButton(win, text='3. Manual Delete', width=20, command=win_man_deletion)
+    button_2 = ctk.CTkButton(win, text='3. Delete Single Record', width=20, command=win_man_deletion)
     button_2.pack(pady=5)
     button_3 = ctk.CTkButton(win, text='Exit', width=20, command=win.destroy)
     button_3.pack(pady=5)
@@ -115,12 +119,11 @@ def insertion_menu():
      win = ctk.CTk()
      win.title("Select the option")
      win.geometry("350x200")
-     button_1 = ctk.CTkButton(win, text='1. Upload File', width=20, command=lambda: open_file_dialog(1))
-     button_2 = ctk.CTkButton(win, text='2. Solo Insert', width=20, command=solo_insert_win)
+     button_1 = ctk.CTkButton(win, text='1. Upload Database file', width=20, command=lambda: open_file_dialog(1))
+     button_2 = ctk.CTkButton(win, text='2. Solo Record Insert', width=20, command=solo_insert_win)
      button_3 = ctk.CTkButton(win, text='Exit', width=20, command=win.destroy)
      button_1.pack(pady=5)
      button_2.pack(pady=5)
-     button_3 = ctk.CTkButton(win, text='Exit', width=20, command=win.destroy)
      button_3.pack(pady=5)
     
      win.mainloop() 
@@ -136,15 +139,16 @@ def solo_insert_win():
     id_entry = ctk.CTkEntry(win)
     id_entry.pack()
 
+    name_label = ctk.CTkLabel(win, text="Name:")
+    name_label.pack()
+    name_entry = ctk.CTkEntry(win) 
+    name_entry.pack()
+    
     registration_label = ctk.CTkLabel(win, text="Registration No:")
     registration_label.pack()
     registration_entry = ctk.CTkEntry(win) 
     registration_entry.pack()
     
-    name_label = ctk.CTkLabel(win, text="Name:")
-    name_label.pack()
-    name_entry = ctk.CTkEntry(win) 
-    name_entry.pack()
     
     usn_label = ctk.CTkLabel(win, text="USN:")
     usn_label.pack()
@@ -174,9 +178,120 @@ def win_man_deletion():
 
     win.mainloop()
     
+def win_view_deatils():
+    win = ctk.CTk()
+    win.title("Choose the option")
+    win.geometry("400x300")
+    label = ctk.CTkLabel(win, text="Choose the option")
+    label.pack()
+    button_1 = ctk.CTkButton(win, text='1. Search by USN', width=20, command=lambda: view_details(1))
+    button_1.pack() 
+
+    button_2 = ctk.CTkButton(win, text='2. Search by Name', width=20, command=lambda: view_details(2))
+    button_2.pack() 
+
+    
+    win.mainloop()
+    
+    
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Application Login   
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+def view_details(num):
+    if num == 1:
+        def main_view_details():
+            usn = usn_entry.get()
+            usn = usn.upper()
+            usn_main = {'addmission_no': usn}
+            data = collection.find_one(usn_main)
+            
+            win_result = ctk.CTk()   
+            win_result.title("Search Result")
+            win_result.geometry("400x300")
+
+            if data:
+                id_label = ctk.CTkLabel(win_result, text=f"ID: {data['_id']}")
+                id_label.pack()
+
+                name_label = ctk.CTkLabel(win_result, text=f"Name: {data['name']}")
+                name_label.pack()
+
+                usn_label = ctk.CTkLabel(win_result, text=f"Admission No: {data['addmission_no']}")
+                usn_label.pack()
+
+                reg_label = ctk.CTkLabel(win_result, text=f"Registration No: {data['registration']}")
+                reg_label.pack()
+                
+                mark_label = ctk.CTkLabel(win_result, text=f"Marks: {data['marks']}")
+                mark_label.pack()
+                
+            else:
+                not_found_label = ctk.CTkLabel(win_result, text=f"Oh-oh! No records found with USN {usn}")
+                not_found_label.pack()
+
+            win_result.mainloop()
+        
+        win = ctk.CTk()
+        win.title("Enter USN")
+        win.geometry("400x300")
+
+        usn_label = ctk.CTkLabel(win, text="USN:")
+        usn_label.pack()
+
+        usn_entry = ctk.CTkEntry(win) 
+        usn_entry.pack()
+
+        search_button = ctk.CTkButton(win, text="Search", command=main_view_details)
+        search_button.pack()
+        
+        win.mainloop()
+        
+    elif num == 2:
+        def main_view_details():
+            name = name_entry.get()
+            name = name.upper()
+            name_main = {'name': name}
+            data = collection.find_one(name_main)
+            
+            win_result = ctk.CTk()   
+            win_result.title("Search Result")
+            win_result.geometry("400x300")
+
+            if data:
+                id_label = ctk.CTkLabel(win_result, text=f"ID: {data['_id']}")
+                id_label.pack()
+
+                name_label = ctk.CTkLabel(win_result, text=f"Name: {data['name']}")
+                name_label.pack()
+
+                usn_label = ctk.CTkLabel(win_result, text=f"Admission No: {data['addmission_no']}")
+                usn_label.pack()
+
+                reg_label = ctk.CTkLabel(win_result, text=f"Registration No: {data['registration']}")
+                reg_label.pack()
+                
+                mark_label = ctk.CTkLabel(win_result, text=f"Marks: {data['marks']}")
+                mark_label.pack()
+            else:
+                not_found_label = ctk.CTkLabel(win_result, text=f"Oh-oh! No records found with name {name}")
+                not_found_label.pack()
+
+            win_result.mainloop()
+        
+        win = ctk.CTk()
+        win.title("Enter Name")
+        win.geometry("400x300")
+
+        name_label = ctk.CTkLabel(win, text="Name:")
+        name_label.pack()
+
+        name_entry = ctk.CTkEntry(win) 
+        name_entry.pack()
+
+        search_button = ctk.CTkButton(win, text="Search", command=main_view_details)
+        search_button.pack()
+        
+        win.mainloop()
 
 def solo_insert(id, registration, name, usn):
     id = int(id)
@@ -309,6 +424,7 @@ def  man_update_marks(file_path):
         data = fyle.readlines()
         for i in range(len(data)):
             name = ' '.join(data[i].split()[1:])
+            name = name.upper()
             mark = data[i].split()[0]
             filter_document = {'name': name}
             update_document = {'$set': {'marks': mark}}
