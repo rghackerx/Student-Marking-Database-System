@@ -1,4 +1,7 @@
-# MP-SMS - A Multi-Purpose Student Marking Database System  -- Credits : RGHacker
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# MP-SMS - A Multi-Purpose Student Marka Management System  -- Credits : RGHacker
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 import customtkinter as ctk
 from tkinter import filedialog
 import tkinter as tk
@@ -12,7 +15,7 @@ import string as st
 
 def success_msg_win(num):
     win = ctk.CTk()
-    win.title("Student Marking System")
+    win.title("PoP-Up")
     win.geometry("300x150")
 
     if num == True:
@@ -31,7 +34,7 @@ def success_msg_win(num):
 def create_gui():
     main = ctk.CTk()
     main.configure(bg='black')
-    main.title("Student Marking System")
+    main.title("STUDENT MARKS MANAGEMENT SYSTEM")
     main.geometry("450x200")
 
     label = ctk.CTkLabel(main, text="Student Management System", font=("Arial", 13))
@@ -312,10 +315,7 @@ def  man_update_marks(file_path):
             result = collection.update_one(filter_document, update_document, upsert=True)
         success_msg_win(True)
 
-                
-            
-        
-          
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Main Function           
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
